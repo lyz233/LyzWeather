@@ -1,5 +1,6 @@
 package com.example.lyzweather.ui.place
 
+import android.content.Intent
 import android.os.Bundle
 import android.text.Editable
 import android.view.LayoutInflater
@@ -15,6 +16,7 @@ import androidx.lifecycle.ViewModelProvider
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import com.example.lyzweather.R
+import com.example.lyzweather.ui.weather.WeatherActivity
 
 class PlaceFragment:Fragment() {
 
@@ -34,6 +36,20 @@ class PlaceFragment:Fragment() {
     //新写法是什么
     override fun onActivityCreated(savedInstanceState: Bundle?) {
         super.onActivityCreated(savedInstanceState)
+
+        if (viewModel.isPlacedSaved()){
+            val place = viewModel.getSavedPlace()
+            val intent = Intent(context,WeatherActivity::class.java).apply {
+                putExtra("location_lng",place.location.lng)
+                putExtra("location_lat",place.location.lat)
+                putExtra("place_name",place.name)
+            }
+            startActivity(intent)
+            activity?.finish()
+            return
+        }
+
+
         val layoutManager = LinearLayoutManager(activity)
 
         val recyclerView = view?.findViewById<RecyclerView>(R.id.recyclerView)
